@@ -11,7 +11,7 @@ export default function HomePage() {
             national IDs and corresponding email addresses, and send emails to all registered users
             using a dynamic email template.
           </p>
-          <Link to="/" className="btn btn-primary">
+          <Link to="/dashboard" className="btn btn-primary">
             Get Started
           </Link>
         </div>
