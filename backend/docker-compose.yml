@@ -1,0 +1,69 @@
+volumes:
+  postgres_data: {}
+  postgres_data_backups: {}
+  redis_data: {}
+
+services:
+  django: &django
+    build:
+      context: .
+      dockerfile: ./docker/local/django/Dockerfile
+    image: django
+    container_name: django
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - .:/app:z
+    ports:
+      - "8000:8000"
+    command: /start
+    env_file:
+      - .env
+
+  postgres:
+    build:
+      context: .
+      dockerfile: ./docker/production/postgres/Dockerfile
+    image: postgres
+    container_name: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - postgres_data_backups:/backups
+    env_file:
+      - .env
+
+  redis:
+    image: docker.io/redis:6
+    container_name: redis
+
+    volumes:
+      - redis_data:/data
+
+  celeryworker:
+    <<: *django
+    image: celeryworker
+    container_name: celeryworker
+    depends_on:
+      - redis
+      - postgres
+    ports: []
+    command: /start-celeryworker
+
+  celerybeat:
+    <<: *django
+    image: celerybeat
+    container_name: celerybeat
+    depends_on:
+      - redis
+      - postgres
+    ports: []
+    command: /start-celerybeat
+
+  flower:
+    <<: *django
+    image: flower
+    container_name: flower
+    ports:
+      - "5555:5555"
+    command: /start-flower
