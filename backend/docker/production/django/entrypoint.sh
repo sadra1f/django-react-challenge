@@ -46,4 +46,7 @@ END
 
 >&2 echo 'PostgreSQL is available'
 
+echo "DATABASE_URL=${DATABASE_URL}" >> /app/.env
+echo "CELERY_BROKER_URL=${CELERY_BROKER_URL}" >> /app/.env
+
 exec "$@"

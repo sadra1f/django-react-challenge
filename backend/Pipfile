@@ -16,22 +16,16 @@ flower = "==2.0.1"
 django = "==5.0.8"
 django-environ = "==0.11.2"
 django-model-utils = "==4.5.1"
-django-crispy-forms = "==2.3"
-crispy-bootstrap5 = "==2024.2"
 django-redis = "==5.4.0"
 djangorestframework = "==3.15.2"
 django-cors-headers = "==4.4.0"
 drf-spectacular = "==0.27.2"
-django-allauth = {extras = ["mfa"], version = "==64.1.0"}
 gunicorn = "==23.0.0"
-django-anymail = "==11.1"
 psycopg = {extras = ["c"], version = "==3.2.1"}
 watchfiles = "==0.21.0"
 
 [dev-packages]
 black = "==24.8.0"
-werkzeug = {extras = ["watchdog"], version = "==3.0.3"}
-ipdb = "==0.13.13"
 isort = "==5.13.2"
 
 [requires]

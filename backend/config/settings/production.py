@@ -1,7 +1,6 @@
 # ruff: noqa: E501
 from .base import *  # noqa
 from .base import DATABASES
-from .base import INSTALLED_APPS
 from .base import env
 
 # from .base import SPECTACULAR_SETTINGS
@@ -99,15 +98,9 @@ EMAIL_SUBJECT_PREFIX = env(
 # Django Admin URL regex.
 ADMIN_URL = env("DJANGO_ADMIN_URL")
 
-# Anymail
-# https://anymail.readthedocs.io/en/stable/installation/#installing-anymail
-INSTALLED_APPS += ["anymail"]
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
-# https://anymail.readthedocs.io/en/stable/installation/#anymail-settings-reference
-# https://anymail.readthedocs.io/en/stable/esps
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-ANYMAIL = {}
 
 
 # LOGGING
