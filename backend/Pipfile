@@ -23,6 +23,8 @@ drf-spectacular = "==0.27.2"
 gunicorn = "==23.0.0"
 psycopg = {extras = ["c"], version = "==3.2.1"}
 watchfiles = "==0.21.0"
+djangorestframework-simplejwt = "==5.3.1"
+djoser = "==2.2.3"
 
 [dev-packages]
 black = "==24.8.0"

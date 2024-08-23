@@ -5,7 +5,6 @@ from django.contrib import admin
 from django.urls import include
 from django.urls import path
 from django.views import defaults as default_views
-from rest_framework.authtoken.views import obtain_auth_token
 
 # from drf_spectacular.views import SpectacularAPIView
 # from drf_spectacular.views import SpectacularSwaggerView
@@ -22,8 +21,9 @@ urlpatterns = [
                 path("users/", include("apps.users.urls", namespace="users")),
                 # API base url
                 path("", include("config.api_router")),
-                # DRF auth token
-                path("auth-token/", obtain_auth_token),
+                # Auth
+                path("auth/", include("djoser.urls")),
+                path("auth/", include("djoser.urls.jwt")),
                 # path("schema/", SpectacularAPIView.as_view(), name="api-schema"),
                 # path(
                 #     "docs/",
