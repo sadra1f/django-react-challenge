@@ -1,6 +1,7 @@
 # ruff: noqa: ERA001, E501
 """Base settings to build other settings files upon."""
 
+from datetime import timedelta
 from pathlib import Path
 
 import environ
@@ -313,11 +314,13 @@ REST_FRAMEWORK = {
 # https://djoser.readthedocs.io/en/latest/authentication_backends.html#json-web-token-authentication
 SIMPLE_JWT = {
     "AUTH_HEADER_TYPES": ("JWT",),
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=1),
 }
 
 
 # django-cors-headers - https://github.com/adamchainz/django-cors-headers#setup
-CORS_URLS_REGEX = r"^/api/.*$"
+# CORS_URLS_REGEX = r"^/api/.*$"
+CORS_ALLOW_ALL_ORIGINS = True
 
 
 # By Default swagger ui is available only to admin user(s). You can change permission classes to change that
