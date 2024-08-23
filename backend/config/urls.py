@@ -17,8 +17,6 @@ urlpatterns = [
         "api/",
         include(
             [
-                # User management
-                path("users/", include("apps.users.urls", namespace="users")),
                 # API base url
                 path("", include("config.api_router")),
                 # Auth

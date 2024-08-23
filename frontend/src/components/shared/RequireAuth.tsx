@@ -1,8 +1,8 @@
 import axios from "axios";
 import { ReactNode, useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
-import { API_ROOT } from "../shared/const";
-import { getAuthHeaders } from "../shared/utils";
+import { API_ROOT } from "../../shared/const";
+import { getAuthHeaders } from "../../shared/utils";
 
 export default function RequireAuth({ children }: { children?: ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | undefined>(undefined);
@@ -18,7 +18,7 @@ export default function RequireAuth({ children }: { children?: ReactNode }) {
       .catch(() => {
         setIsAuthenticated(false);
       });
-  });
+  }, []);
 
   // return children;
   return isAuthenticated === undefined ? (

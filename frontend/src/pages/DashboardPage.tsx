@@ -1,13 +1,59 @@
-import { Link } from "react-router-dom";
+import axios from "axios";
+import { /*ChangeEvent,*/ useEffect, useRef, useState } from "react";
+import { API_ROOT } from "../shared/const";
+import { getAuthHeaders } from "../shared/utils";
+import DashboardTable from "../components/dashboard/DashboardTable";
 
 export default function DashboardPage() {
+  const [rows, setRows] = useState([]);
+
+  const csvFileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    axios
+      .get(API_ROOT + "/recipients/", {
+        headers: { ...getAuthHeaders() },
+      })
+      .then((response) => {
+        setRows(response.data.results);
+      });
+  }, []);
+
+  function onCSVFileChange(/*event: ChangeEvent*/) {
+    if (csvFileInputRef.current) {
+      const csvFile = csvFileInputRef.current?.files?.[0];
+
+      if (csvFile) {
+        const formData = new FormData();
+        formData.append("file", csvFile);
+        formData.append("filename", csvFile.name);
+
+        axios
+          .put(API_ROOT + "/csv-file/upload/", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              ...getAuthHeaders(),
+            },
+          })
+          .then((response) => {
+            console.log(response.data);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
+
+      csvFileInputRef.current.value = "";
+    }
+  }
+
   return (
     <div className="hero mt-16 min-h-[calc(100vh-4rem)] bg-base-200 p-8">
       <div className="card hero-content h-full w-full max-w-full shrink-0 bg-base-100 shadow-2xl">
         <div className="flex h-full w-full flex-col space-y-4 px-3 py-2">
           <div className="flex justify-between">
             <div className="flex gap-2">
-              <button className="btn btn-primary btn-sm">
+              {/* <button className="btn btn-primary btn-sm">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -23,9 +69,9 @@ export default function DashboardPage() {
                   />
                 </svg>
                 Send Emails
-              </button>
+              </button> */}
 
-              <button className="btn btn-sm">
+              {/* <button className="btn btn-sm">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -41,11 +87,11 @@ export default function DashboardPage() {
                   />
                 </svg>
                 Edit Template
-              </button>
+              </button> */}
             </div>
 
             <div className="flex gap-2">
-              <button className="btn btn-sm">
+              <button className="btn btn-sm" onClick={() => csvFileInputRef.current?.click()}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -62,8 +108,15 @@ export default function DashboardPage() {
                 </svg>
                 Upload CSV
               </button>
+              <input
+                ref={csvFileInputRef}
+                type="file"
+                accept=".csv"
+                className="hidden"
+                onChange={onCSVFileChange}
+              />
 
-              <button className="btn btn-sm">
+              {/* <button className="btn btn-sm">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -75,39 +128,11 @@ export default function DashboardPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                 </svg>
                 Add Manually
-              </button>
+              </button> */}
             </div>
           </div>
 
-          <div className="flex grow flex-col justify-between space-y-2">
-            <div className="overflow-x-auto">
-              <table className="table">
-                {/* head */}
-                <thead>
-                  <tr>
-                    <th>National ID</th>
-                    <th>Email</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {/* row 1 */}
-                  <tr>
-                    <th>1234567891</th>
-                    <td>test@test.com</td>
-                    <td></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            <div className="join w-full justify-center">
-              <button className="btn join-item btn-sm">1</button>
-              <button className="btn join-item btn-active btn-sm">2</button>
-              <button className="btn join-item btn-sm">3</button>
-              <button className="btn join-item btn-sm">4</button>
-            </div>
-          </div>
+          <DashboardTable className="grow justify-between" rows={rows} />
         </div>
       </div>
     </div>

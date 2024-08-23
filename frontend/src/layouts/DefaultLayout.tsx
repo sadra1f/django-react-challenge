@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import Navbar from "../components/Navbar";
+import Navbar from "../components/shared/Navbar";
 import type { ReactNode } from "react";
 
 export default function DefaultLayout({ children }: { children?: ReactNode }) {

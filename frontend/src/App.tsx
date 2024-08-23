@@ -7,7 +7,7 @@ import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import DashboardPage from "./pages/DashboardPage";
-import RequireAuth from "./components/RequireAuth";
+import RequireAuth from "./components/shared/RequireAuth";
 
 const router = createBrowserRouter([
   {
