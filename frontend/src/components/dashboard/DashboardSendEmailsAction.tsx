@@ -2,7 +2,12 @@ import axios from "axios";
 import { API_ROOT } from "../../shared/const";
 import { getAuthHeaders } from "../../shared/utils";
 
-export default function DashboardSendEmailsAction() {
+type PropType = {
+  disabled?: boolean;
+  onSendEmails?: (event?: MouseEvent) => any;
+};
+
+export default function DashboardSendEmailsAction({ disabled, onSendEmails }: PropType) {
   function onSendEmailsClick() {
     axios.post(
       API_ROOT + "/mail-operation/start/",
@@ -11,10 +16,12 @@ export default function DashboardSendEmailsAction() {
         headers: { ...getAuthHeaders() },
       },
     );
+
+    if (onSendEmails) onSendEmails();
   }
 
   return (
-    <button className="btn btn-primary btn-sm" onClick={onSendEmailsClick}>
+    <button className="btn btn-primary btn-sm" onClick={onSendEmailsClick} disabled={disabled}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"

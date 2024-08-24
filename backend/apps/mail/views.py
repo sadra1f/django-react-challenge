@@ -55,7 +55,6 @@ class OperationViewSet(GenericViewSet):
     @action(detail=False, methods=["get"])
     def progress(self, request):
         data_list = cache.get(self.get_cache_key(), [None] * 5)
-        print(data_list)
         return Response(data_list)
 
     @action(detail=False, methods=["post"])
