@@ -20,3 +20,19 @@ class Template(models.Model):
     def save(self, *args, **kwargs) -> None:
         self.template = clean_html(self.template)
         return super(Template, self).save(*args, **kwargs)
+
+
+class Operation(models.Model):
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+    )
+
+    from_id = models.BigIntegerField()
+    to_id = models.BigIntegerField()
+
+    updated_on = models.DateTimeField(auto_now=True)
+    created_on = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-id"]
