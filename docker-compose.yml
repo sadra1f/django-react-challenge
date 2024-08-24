@@ -4,17 +4,32 @@ volumes:
   redis_data: {}
 
 services:
+  react:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: react
+    container_name: react
+    depends_on:
+      - django
+    volumes:
+      - ./frontend:/app
+    ports:
+      - "5173:5173"
+    env_file:
+      - .env
+
   django: &django
     build:
-      context: .
-      dockerfile: ./docker/local/django/Dockerfile
+      context: ./backend
+      dockerfile: docker/dev/Dockerfile
     image: django
     container_name: django
     depends_on:
       - postgres
       - redis
     volumes:
-      - .:/app:z
+      - ./backend:/app:z
     ports:
       - "8000:8000"
     command: /start
@@ -23,8 +38,8 @@ services:
 
   postgres:
     build:
-      context: .
-      dockerfile: ./docker/production/postgres/Dockerfile
+      context: ./docker/postgres
+      dockerfile: Dockerfile
     image: postgres
     container_name: postgres
     volumes:

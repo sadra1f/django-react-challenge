@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "serve": "vite",
+    "serve": "vite --host 0.0.0.0 --port 5173 --strictPort --clearScreen false",
     "build": "tsc -b && vite build",
     "lint": "run-s lint:*",
     "lint:eslint": "eslint .",

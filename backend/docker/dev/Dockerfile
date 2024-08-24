@@ -11,7 +11,10 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
   # dependencies for building Python packages
   build-essential \
   # psycopg dependencies
-  libpq-dev
+  libpq-dev \
+  # lxml dependencies
+  libxml2-dev \
+  libxslt-dev
 
 # Requirements are installed here to ensure they will be cached.
 RUN pip install pipenv --user --no-cache-dir
@@ -53,6 +56,9 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
   libpq-dev \
   # Translations dependencies
   gettext \
+  # lxml dependencies
+  libxml2-dev \
+  libxslt-dev \
   # cleaning up unused files
   && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
   && rm -rf /var/lib/apt/lists/*
@@ -65,24 +71,24 @@ COPY --from=python-build-stage /usr/src/app/wheels  /wheels/
 RUN pip install --no-cache-dir --no-index --find-links=/wheels/ /wheels/* \
   && rm -rf /wheels/
 
-COPY ./docker/production/django/entrypoint.sh /entrypoint
+COPY ./docker/prod/entrypoint.sh /entrypoint
 RUN sed -i 's/\r$//g' /entrypoint
 RUN chmod +x /entrypoint
 
-COPY ./docker/local/django/start.sh /start
+COPY ./docker/dev/start.sh /start
 RUN sed -i 's/\r$//g' /start
 RUN chmod +x /start
 
 
-COPY ./docker/local/django/celery/start-celeryworker.sh /start-celeryworker
+COPY ./docker/dev/celery/start-celeryworker.sh /start-celeryworker
 RUN sed -i 's/\r$//g' /start-celeryworker
 RUN chmod +x /start-celeryworker
 
-COPY ./docker/local/django/celery/start-celerybeat.sh /start-celerybeat
+COPY ./docker/dev/celery/start-celerybeat.sh /start-celerybeat
 RUN sed -i 's/\r$//g' /start-celerybeat
 RUN chmod +x /start-celerybeat
 
-COPY ./docker/local/django/celery/start-flower.sh /start-flower
+COPY ./docker/dev/celery/start-flower.sh /start-flower
 RUN sed -i 's/\r$//g' /start-flower
 RUN chmod +x /start-flower
 
