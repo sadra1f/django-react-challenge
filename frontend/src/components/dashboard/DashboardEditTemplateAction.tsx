@@ -1,5 +1,8 @@
 import { useEffect, useRef } from "react";
 import Editor from "../shared/Editor";
+import axios from "axios";
+import { API_ROOT } from "../../shared/const";
+import { getAuthHeaders } from "../../shared/utils";
 
 export default function DashboardEditTemplateAction() {
   const quillRef = useRef<any>();
@@ -9,7 +12,21 @@ export default function DashboardEditTemplateAction() {
   }, []);
 
   function setDefaultEditorContent() {
-    quillRef.current.clipboard.dangerouslyPasteHTML("<h1>Hello!</h1>");
+    axios
+      .get(API_ROOT + "/mail-template/", {
+        headers: { ...getAuthHeaders() },
+      })
+      .then((response) => {
+        const template: string | undefined = response.data.template;
+        quillRef.current.clipboard.dangerouslyPasteHTML(template ?? "<h1>Hello!</h1>");
+      })
+      .catch((error) => {
+        if (error.response?.status == 404) {
+          quillRef.current.clipboard.dangerouslyPasteHTML("<h1>Hello!</h1>");
+        } else {
+          alert(error.response?.data?.detail ?? error.message);
+        }
+      });
   }
 
   function onModalToggleClick() {
@@ -18,7 +35,25 @@ export default function DashboardEditTemplateAction() {
   }
 
   function onSave() {
-    console.log(quillRef.current.getSemanticHTML());
+    axios
+      .post(
+        API_ROOT + "/mail-template/",
+        {
+          template: quillRef.current.getSemanticHTML(),
+        },
+        {
+          headers: { ...getAuthHeaders() },
+        },
+      )
+      .then((response) => {
+        const template: string | undefined = response.data.template;
+        if (template) {
+          quillRef.current.clipboard.dangerouslyPasteHTML(template);
+        }
+      })
+      .catch((error) => {
+        alert(error.response?.data?.detail ?? error.message);
+      });
   }
 
   return (
