@@ -1,7 +1,3 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { API_ROOT } from "../shared/const";
-import { getAuthHeaders } from "../shared/utils";
 import DashboardTable from "../components/dashboard/DashboardTable";
 import DashboardEditTemplateAction from "../components/dashboard/DashboardEditTemplateAction";
 import DashboardUploadCSVAction from "../components/dashboard/DashboardUploadCSVAction";
@@ -9,18 +5,6 @@ import DashboardUploadCSVAction from "../components/dashboard/DashboardUploadCSV
 // import DashboardSendEmailsAction from "../components/dashboard/DashboardSendEmailsAction";
 
 export default function DashboardPage() {
-  const [rows, setRows] = useState([]);
-
-  useEffect(() => {
-    axios
-      .get(API_ROOT + "/recipients/", {
-        headers: { ...getAuthHeaders() },
-      })
-      .then((response) => {
-        setRows(response.data.results);
-      });
-  }, []);
-
   return (
     <div className="hero mt-16 min-h-[calc(100vh-4rem)] bg-base-200 p-8">
       <div className="card hero-content h-full w-full max-w-full shrink-0 bg-base-100 shadow-2xl">
@@ -37,7 +21,7 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          <DashboardTable className="grow justify-between" rows={rows} />
+          <DashboardTable className="grow justify-between" />
         </div>
       </div>
     </div>

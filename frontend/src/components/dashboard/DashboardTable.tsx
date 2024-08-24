@@ -1,4 +1,24 @@
-export default function DashboardTable({className, rows}: {className?: string, rows: Array<any>}) {
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { API_ROOT } from "../../shared/const";
+import { getAuthHeaders } from "../../shared/utils";
+
+export default function DashboardTable({ className }: { className?: string }) {
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [rows, setRows] = useState<any[]>([]);
+
+  useEffect(() => {
+    axios
+      .get(API_ROOT + `/recipients/?page=${page}`, {
+        headers: { ...getAuthHeaders() },
+      })
+      .then((response) => {
+        setRows(response.data.results);
+        setTotalPages(response.data.total_pages ?? 0);
+      });
+  }, [page]);
+
   return (
     <div className={`flex flex-col space-y-2 ${className}`}>
       <div className="overflow-x-auto">
@@ -24,10 +44,25 @@ export default function DashboardTable({className, rows}: {className?: string, r
       </div>
 
       <div className="join w-full justify-center">
-        <button className="btn join-item btn-sm">1</button>
-        <button className="btn join-item btn-active btn-sm">2</button>
-        <button className="btn join-item btn-sm">3</button>
-        <button className="btn join-item btn-sm">4</button>
+        <div className="join">
+          <button
+            className="btn join-item btn-sm"
+            onClick={() => setPage(Math.max(page - 1, 1))}
+            disabled={page == 1}
+          >
+            «
+          </button>
+          <button className="btn join-item btn-sm">
+            {page} / {totalPages}
+          </button>
+          <button
+            className="btn join-item btn-sm"
+            onClick={() => setPage(Math.min(page + 1, totalPages))}
+            disabled={page == totalPages}
+          >
+            »
+          </button>
+        </div>
       </div>
     </div>
   );
