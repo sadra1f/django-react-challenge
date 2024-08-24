@@ -2,7 +2,7 @@ import { ReactNode, useContext, useEffect } from "react";
 import { Navigate } from "react-router-dom";
 import { AuthenticationContext } from "../../store/AuthenticationContext";
 
-export default function RequireAuth({ children }: { children?: ReactNode }) {
+export default function NotAuth({ children }: { children?: ReactNode }) {
   const { isAuthenticated, updateAuthenticationStatus } =
     useContext(AuthenticationContext);
 
@@ -16,8 +16,8 @@ export default function RequireAuth({ children }: { children?: ReactNode }) {
       <span className="loading loading-spinner loading-lg"></span>
     </div>
   ) : isAuthenticated ? (
-    children
+    <Navigate to="/dashboard" replace />
   ) : (
-    <Navigate to="/login" replace />
+    children
   );
 }

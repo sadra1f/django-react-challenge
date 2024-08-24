@@ -1,12 +1,15 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import { API_ROOT } from "../shared/const";
 import { setCookie } from "../shared/utils";
+import { AuthenticationContext } from "../store/AuthenticationContext";
 
 export default function LoginPage() {
   const navigate = useNavigate();
+
+  const { setIsAuthenticated } = useContext(AuthenticationContext);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -22,6 +25,8 @@ export default function LoginPage() {
       .then((response) => {
         setCookie("access", response.data.access ?? "");
         setCookie("refresh", response.data.refresh ?? "");
+
+        setIsAuthenticated(true);
 
         navigate("/dashboard");
       })
