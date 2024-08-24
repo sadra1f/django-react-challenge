@@ -22,3 +22,12 @@ docker compose exec -it django python manage.py createsuperuser
 | Django    | 8000 |
 | React     | 5173 |
 | Flower    | 5555 |
+
+### Known issues and shortcomings
+
+- Auth cookies are not HTTP only
+- CORS policy is allowing all origins
+- JWT access token expires in 1 day and doesn't refresh
+- Error handling and validation need improvements
+- CSV files aren't being saved to database in chunks
+- Lack of documentation
