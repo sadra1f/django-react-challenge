@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 from .models import CSVFile, Recipient
 
 
-@shared_task()
+@shared_task(time_limit=530, soft_time_limit=500)
 def load_csv_to_database(user_id: int, csv_file_id: int):
     user = get_user_model().objects.filter(id=user_id).first()
     csv_file_object = CSVFile.objects.filter(id=csv_file_id).first()
