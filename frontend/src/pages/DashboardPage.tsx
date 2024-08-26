@@ -67,7 +67,11 @@ export default function DashboardPage() {
               <DashboardProgress
                 autoUpdate={hasOperation && isOperationInProgress}
                 isInProgress={isOperationInProgress}
-                onPlayToggle={() => setIsOperationInProgress(!isOperationInProgress)}
+                onPlayToggle={() =>
+                  setIsOperationInProgress(
+                    (oldIsOperationInProgress) => !oldIsOperationInProgress, //
+                  )
+                }
                 onStop={() => {
                   setHasOperation(false);
                   setIsOperationInProgress(false);

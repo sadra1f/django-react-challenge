@@ -49,7 +49,7 @@ export default function DashboardProgress({
         });
 
       setTimeout(() => {
-        setIntervalCount(intervalCount + 1);
+        setIntervalCount((oldIntervalCount) => oldIntervalCount + 1);
       }, 3000);
     }
   }, [intervalCount, autoUpdate]);
