@@ -30,4 +30,5 @@ docker compose exec -it django python manage.py createsuperuser
 - JWT access token expires in 1 day and doesn't refresh
 - Error handling and validation need improvements
 - CSV files aren't being saved to database in chunks
+- Sometimes when creating Postgres container, Celery breaks and needs a restart
 - Lack of documentation
