@@ -25,12 +25,13 @@ export default function DashboardProgress({
   onStop,
 }: PropType) {
   const [intervalCount, setIntervalCount] = useState(0);
-
-  const [currentFrom, setCurrentFrom] = useState(value);
-  const [currentTo, setCurrentTo] = useState(max);
-  const [currentValue, setCurrentValue] = useState(value);
-  const [currentMax, setCurrentMax] = useState(max);
-  const [currentPlaying, setCurrentPlaying] = useState(false);
+  const [data, setData] = useState({
+    from: value,
+    to: max,
+    value: value,
+    max: max,
+    isInProgress: isInProgress,
+  });
 
   useEffect(() => {
     if (autoUpdate) {
@@ -40,11 +41,13 @@ export default function DashboardProgress({
         })
         .then((response) => {
           if (response.data && response.data[0]) {
-            setCurrentFrom(response.data[0]);
-            setCurrentTo(response.data[1]);
-            setCurrentValue(response.data[2]);
-            setCurrentMax(response.data[3]);
-            setCurrentPlaying(response.data[4]);
+            setData({
+              from: response.data[0],
+              to: response.data[1],
+              value: response.data[2],
+              max: response.data[3],
+              isInProgress: response.data[4],
+            });
           }
         });
 
@@ -67,7 +70,7 @@ export default function DashboardProgress({
   }
 
   function onPlayToggleClick() {
-    if (isInProgress || currentPlaying) {
+    if (isInProgress || data.isInProgress) {
       axios.post(
         API_ROOT + "/mail-operation/pause/",
         {},
@@ -114,7 +117,7 @@ export default function DashboardProgress({
             className="btn btn-ghost join-item btn-sm px-1"
             onClick={() => onPlayToggleClick()}
           >
-            {isInProgress || currentPlaying ? (
+            {isInProgress || data.isInProgress ? (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -145,12 +148,12 @@ export default function DashboardProgress({
         </div>
       )}
 
-      <progress className="progress me-2 w-56" value={currentValue} max={currentMax}></progress>
+      <progress className="progress me-2 w-56" value={data.value} max={data.max}></progress>
 
-      {currentFrom && currentTo && !hideCounter && (
+      {data.from && data.to && !hideCounter && (
         <p className="text-xs font-bold">
-          From {currentFrom} to {currentTo}
-          {currentValue && currentMax && ` - ${currentValue}/${currentMax}`}
+          From {data.from} to {data.to}
+          {data.value && data.max && ` - ${data.value}/${data.max}`}
         </p>
       )}
     </div>
