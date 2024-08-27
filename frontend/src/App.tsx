@@ -1,11 +1,7 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 import DefaultLayout from "./layouts/DefaultLayout";
-import { AuthenticationContext } from "./store/AuthenticationContext";
-import { API_ROOT } from "./shared/const";
-import { deleteCookie, getAuthHeaders } from "./shared/utils";
+import AuthenticationContextProvider from "./store/AuthenticationContext";
 
 import ErrorPage from "./pages/ErrorPage";
 import HomePage from "./pages/HomePage";
@@ -57,34 +53,10 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(undefined!);
-
-  useEffect(() => {
-    updateAuthenticationStatus();
-  }, []);
-
-  function updateAuthenticationStatus() {
-    axios
-      .get(API_ROOT + "/auth/users/me/", {
-        headers: { ...getAuthHeaders() },
-      })
-      .then(() => {
-        setIsAuthenticated(true);
-      })
-      .catch(() => {
-        setIsAuthenticated(false);
-
-        deleteCookie("access");
-        deleteCookie("refresh");
-      });
-  }
-
   return (
-    <AuthenticationContext.Provider
-      value={{ isAuthenticated, setIsAuthenticated, updateAuthenticationStatus }}
-    >
+    <AuthenticationContextProvider>
       <RouterProvider router={router} />
-    </AuthenticationContext.Provider>
+    </AuthenticationContextProvider>
   );
 }
 
