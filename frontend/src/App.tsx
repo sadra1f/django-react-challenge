@@ -1,3 +1,4 @@
+import { lazy, Suspense } from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 import DefaultLayout from "./layouts/DefaultLayout";
@@ -8,9 +9,11 @@ import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import LogoutPage from "./pages/LogoutPage";
 import SignupPage from "./pages/SignupPage";
-import DashboardPage from "./pages/DashboardPage";
 import RequireAuth from "./components/shared/RequireAuth";
 import NotAuth from "./components/shared/NotAuth";
+import Loading from "./components/shared/Loading";
+
+const DashboardPage = lazy(() => import("./pages/DashboardPage"));
 
 const router = createBrowserRouter([
   {
@@ -44,7 +47,9 @@ const router = createBrowserRouter([
         path: "dashboard",
         element: (
           <RequireAuth>
-            <DashboardPage />
+            <Suspense fallback={<Loading />}>
+              <DashboardPage />
+            </Suspense>
           </RequireAuth>
         ),
       },
