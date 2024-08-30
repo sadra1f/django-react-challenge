@@ -2,9 +2,10 @@ import { ReactNode, useContext, useEffect } from "react";
 import { Navigate } from "react-router-dom";
 import { AuthenticationContext } from "../../store/AuthenticationContext";
 
+import Loading from "./Loading";
+
 export default function RequireAuth({ children }: { children?: ReactNode }) {
-  const { isAuthenticated, updateAuthenticationStatus } =
-    useContext(AuthenticationContext);
+  const { isAuthenticated, updateAuthenticationStatus } = useContext(AuthenticationContext);
 
   useEffect(() => {
     updateAuthenticationStatus();
@@ -12,9 +13,7 @@ export default function RequireAuth({ children }: { children?: ReactNode }) {
 
   // return children;
   return isAuthenticated === undefined ? (
-    <div className="flex min-h-screen w-full items-center justify-center">
-      <span className="loading loading-spinner loading-lg"></span>
-    </div>
+    <Loading />
   ) : isAuthenticated ? (
     children
   ) : (
